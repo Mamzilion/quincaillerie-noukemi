@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quincaillerie Noukemi - Votre partenaire en matériel de qualité</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#121212',
+                            card: '#1e1e1e',
+                            orange: '#ff9d00',
+                            'orange-hover': '#e08b00',
+                            whatsapp: '#25d366',
+                            'whatsapp-dark': '#1ebd56',
+                            bg: '#f8fafc'
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px rgba(255, 157, 0, 0.35)',
+                        'glow-lg': '0 0 35px rgba(255, 157, 0, 0.5)',
+                        'card-hover': '0 16px 32px -8px rgba(0, 0, 0, 0.18), 0 0 20px rgba(255, 157, 0, 0.2)',
+                        'floating': '0 10px 30px -10px rgba(0, 0, 0, 0.3)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- PLACEMENT DE LA FONCTION EN HAUT DE HEAD POUR ÉVITER LES ERREURS ONERROR -->
+    <script>
+        function handleImageError(imgElement, type) {
+            if (!imgElement) return;
+            const parent = imgElement.parentElement;
+            imgElement.style.display = 'none';
+
+            if (type === 'LOGO_PLACEHOLDER') {
+                const placeholder = document.getElementById('logo-placeholder-fallback');
+                if (placeholder) placeholder.classList.remove('hidden');
+            } else if (parent) {
+                parent.innerHTML = `
+                    <div class="flex flex-col items-center justify-center text-slate-400 p-4 text-center h-full w-full bg-slate-100 border-2 border-dashed border-slate-200 rounded-xl">
+                        <i data-lucide="${type || 'package'}" class="w-8 h-8 mb-2 text-brand-orange/80"></i>
+                        <span class="text-[11px] font-bold text-slate-600">Photo à venir</span>
+                        <span class="text-[9px] text-slate-400 mt-0.5">${imgElement.getAttribute('src') || 'logo.png'}</span>
+                    </div>
+                `;
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons();
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Styles personnalisés & Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { border-color: rgba(255, 157, 0, 0.4); box-shadow: 0 0 15px rgba(255, 157, 0, 0.2); }
+            50% { border-color: rgba(255, 157, 0, 0.9); box-shadow: 0 0 30px rgba(255, 157, 0, 0.5); }
+        }
+
+        @keyframes pulsePin {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-6px) scale(1.1); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .logo-box {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+
+        .animated-pin {
+            animation: pulsePin 2s infinite ease-in-out;
+        }
+
+        /* Cartes produits avec transition d'élévation et agrandissement */
+        .product-card {
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.18), 0 0 22px rgba(255, 157, 0, 0.22);
+            border-color: #ff9d00;
+        }
+
+        /* Zoom dynamique sur l'image lors du survol de la carte */
+        .product-card-img {
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .product-card:hover .product-card-img {
+            transform: scale(1.12);
+        }
+
+        /* Masquer la scrollbar pour une navigation fluide sur mobile */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 font-sans antialiased min-h-screen flex flex-col pb-24 lg:pb-12">
+
+    <!-- HEADER / HERO SECTION -->
+    <header class="bg-brand-dark text-white border-b-4 border-brand-orange relative overflow-hidden shadow-xl">
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-card to-brand-dark opacity-90"></div>
+        <div class="relative max-w-5xl mx-auto px-4 py-6 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <!-- LOGO & INFOS -->
+            <div class="flex flex-col sm:flex-row items-center text-center sm:text-left gap-5">
+                <!-- FORME CARRÉE LUMINEUSE DÉDIÉE À VOTRE LOGO (AVEC ICÔNE CLÉ EN FALLBACK) -->
+                <div class="logo-box relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-2 border-brand-orange bg-brand-card flex-shrink-0 shadow-glow flex items-center justify-center p-2 group transition-all duration-300 hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-b from-brand-orange/10 to-transparent pointer-events-none z-10"></div>
+                    
+                    <!-- VOTRE FICHIER LOGO "logo.jpg" -->
+                    <img id="main-logo" src="logo.jpg" alt="Logo Quincaillerie Noukemi" class="w-full h-full object-contain relative z-20" onerror="handleImageError(this, 'LOGO_PLACEHOLDER')">
+                    
+                    <!-- CLÉ À MOLETTE & TEXTE DE SECOURS EN ATTENDANT VOTRE FICHIER LOGO.JPG -->
+                    <div id="logo-placeholder-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center text-center p-2 z-0">
+                        <i data-lucide="wrench" class="w-10 h-10 text-brand-orange mb-1 group-hover:rotate-12 transition-transform"></i>
+                        <span class="text-[11px] font-black tracking-wider text-white uppercase">NOUKEMI</span>
+                        <span class="text-[8px] text-slate-400">Insérer logo.jpg</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-center sm:justify-start gap-2">
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wide text-white uppercase">
+                            Quincaillerie <span class="text-brand-orange">Noukemi</span>
+                        </h1>
+                        <span class="hidden sm:inline-block bg-brand-orange/20 text-brand-orange text-xs px-2.5 py-0.5 rounded-full border border-brand-orange/40 font-semibold">Pro</span>
+                    </div>
+                    <p class="text-slate-300 text-sm font-medium italic mt-1">"Votre partenaire en matériel de qualité"</p>
+                    <p class="text-xs text-brand-orange font-semibold mt-2 flex items-center justify-center sm:justify-start gap-1">
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Spécialiste Câblage & Matériel Électrique
+                    </p>
+                </div>
+            </div>
+
+            <!-- INFOS PRATIQUES / CONTACT DIRECT -->
+            <div class="flex flex-wrap sm:flex-nowrap items-center justify-center gap-3 w-full md:w-auto">
+                <a href="tel:+237650212584" class="flex-1 sm:flex-initial bg-brand-orange hover:bg-brand-orange-hover text-brand-dark font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-95">
+                    <i data-lucide="phone-call" class="w-4 h-4"></i>
+                    <span>6 50 21 25 84</span>
+                </a>
+                <button id="open-quote-modal" class="relative bg-brand-card hover:bg-slate-800 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-slate-700 flex items-center justify-center gap-2 transition-all active:scale-95">
+                    <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-orange"></i>
+                    <span>Mon Devis</span>
+                    <span id="quote-badge" class="absolute -top-2 -right-2 bg-brand-orange text-brand-dark font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- BARRE DE RECHERCHE ET FILTRES -->
+    <main class="max-w-5xl mx-auto px-4 py-6 sm:px-6 flex-1 w-full space-y-6">
+        
+        <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+            <!-- RECHERCHE EN TEMPS RÉEL -->
+            <div class="relative">
+                <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="search-input" placeholder="Rechercher un câble, disjoncteur, luminaire, douille..." 
+                       class="w-full pl-11 pr-10 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all">
+                <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- FILTRES PAR CATÉGORIES -->
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                <button class="category-btn active bg-brand-dark text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all shadow-sm flex items-center gap-1.5" data-category="all">
+                    <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+                    <span>Tous les matériels</span>
+                </button>
+                <button class="category-btn bg-white text-slate-600 border border-slate-200 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all hover:bg-slate-50 flex items-center gap-1.5" data-category="cables">
+                    <i data-lucide="zap" class="w-3.5 h-3.5 text-brand-orange"></i>
+                    <span>Câbles & Fils</span>
+                </button>
+                <button class="category-btn bg-white text-slate-600 border border-slate-200 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all hover:bg-slate-50 flex items-center gap-1.5" data-category="luminaires">
+                    <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i>
+                    <span>Luminaires & Lustres</span>
+                </button>
+                <button class="category-btn bg-white text-slate-600 border border-slate-200 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all hover:bg-slate-50 flex items-center gap-1.5" data-category="outillage">
+                    <i data-lucide="wrench" class="w-3.5 h-3.5 text-blue-500"></i>
+                    <span>Outillage & Plomberie</span>
+                </button>
+            </div>
+
+            <!-- FILTRE DISPONIBILITÉ ET COMPTEUR -->
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                <label class="flex items-center gap-2 cursor-pointer text-slate-600 font-medium select-none">
+                    <input type="checkbox" id="stock-only-filter" class="rounded text-brand-orange focus:ring-brand-orange w-4 h-4">
+                    <span>Afficher uniquement les articles <strong>En Stock Réel</strong></span>
+                </label>
+                <span id="results-count" class="text-slate-400 font-medium">-- articles</span>
+            </div>
+        </div>
+
+        <!-- GRILLE DES PRODUITS -->
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Les produits seront injectés dynamiquement ici -->
+        </div>
+
+        <!-- MESSAGE EN CAS DE SANS RÉSULTAT -->
+        <div id="no-results" class="hidden text-center py-12 bg-white rounded-2xl border border-slate-200 p-6 my-4">
+            <i data-lucide="package-search" class="w-12 h-12 text-slate-300 mx-auto mb-3"></i>
+            <h3 class="font-bold text-slate-700 text-base mb-1">Aucun produit ne correspond à votre recherche</h3>
+            <p class="text-xs text-slate-500">Essayez de modifier vos mots-clés ou de désactiver le filtre de stock.</p>
+        </div>
+
+        <!-- SECTION LOCALISATION ANIMÉE DU MAGASIN -->
+        <section class="bg-gradient-to-br from-brand-dark to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-slate-800">
+            <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-brand-orange/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                <div class="space-y-3 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-orange/20 border border-brand-orange/40 text-brand-orange text-xs font-bold">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 animated-pin"></i>
+                        <span>Localisation Exacte du Magasin</span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-black tracking-wide text-white">Venez nous rendre visite à Yaoundé</h2>
+                    <p class="text-slate-300 text-xs sm:text-sm max-w-md">
+                        <strong class="text-brand-orange">Mfoundi rue SRC 1.055, Camp pantamy</strong>. Matériel garanti, conseils professionnels et retrait immédiat sur place.
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2 text-xs text-slate-400">
+                        <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-4 h-4 text-brand-orange"></i> Lun - Sam: 7h30 - 18h30</span>
+                        <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Stock Vérifié sur Place</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <a href="https://maps.google.com/?q=Camp+pantamy+Yaounde" target="_blank" class="bg-brand-orange hover:bg-brand-orange-hover text-brand-dark font-extrabold px-5 py-3 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-glow hover:scale-105 active:scale-95">
+                        <i data-lucide="navigation" class="w-4 h-4"></i>
+                        <span>Ouvrir dans Google Maps</span>
+                    </a>
+                    <a href="https://wa.me/237650212584?text=Bonjour,%20pouvez-vous%20m'indiquer%20l'itinéraire%20exact%20pour%20venir%20au%20magasin%20?" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-5 py-3 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 border border-slate-700 transition-all hover:scale-105 active:scale-95">
+                        <i data-lucide="message-square" class="w-4 h-4 text-brand-whatsapp"></i>
+                        <span>Demander l'itinéraire sur WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER AVEC LOCALISATION ET CONTACT DIRECT -->
+    <footer class="bg-brand-dark text-slate-300 py-8 border-t border-slate-800 mt-auto">
+        <div class="max-w-5xl mx-auto px-4 text-center space-y-4">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs">
+                <span class="flex items-center gap-1">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-brand-orange"></i>
+                    Mfoundi rue SRC 1.055, Camp pantamy, Yaoundé
+                </span>
+                <span class="hidden sm:inline text-slate-600">•</span>
+                <span class="flex items-center gap-1">
+                    <i data-lucide="phone" class="w-4 h-4 text-brand-orange"></i>
+                    +237 6 50 21 25 84
+                </span>
+            </div>
+            <p class="text-[11px] text-slate-500">
+                &copy; Quincaillerie Noukemi - Tous droits réservés.
+            </p>
+        </div>
+    </footer>
+
+    <!-- BARRE D'ACTION FIXE SUR MOBILE -->
+    <div class="fixed bottom-0 left-0 right-0 bg-brand-dark/95 backdrop-blur-md border-t border-slate-800 p-3 z-40 lg:hidden shadow-floating">
+        <div class="flex items-center gap-2 max-w-md mx-auto">
+            <a href="tel:+237650212584" class="flex-1 bg-brand-dark border border-brand-orange text-brand-orange font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
+                <i data-lucide="phone" class="w-4 h-4"></i>
+                <span>Appeler Direct</span>
+            </a>
+            <a href="https://wa.me/237650212584?text=Bonjour%20Quincaillerie%20Noukemi,%20je%20souhaite%20des%20renseignements%20sur%20vos%20produits." target="_blank" class="flex-1 bg-brand-whatsapp hover:bg-brand-whatsapp-dark text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                <span>WhatsApp</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- MODALE PANIER / DEVIS EXPRESS -->
+    <div id="quote-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl flex flex-col max-h-[85vh] animate-fade-in">
+            <div class="bg-brand-dark text-white p-4 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="file-text" class="w-5 h-5 text-brand-orange"></i>
+                    <h3 class="font-bold text-sm">Mon Devis Express Noukemi</h3>
+                </div>
+                <button id="close-quote-modal" class="text-slate-400 hover:text-white p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="p-4 flex-1 overflow-y-auto space-y-3" id="quote-items-list">
+                <!-- Produits ajoutés au devis -->
+            </div>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-200 space-y-3">
+                <div class="flex justify-between text-xs text-slate-600 font-medium">
+                    <span>Nombre d'articles sélectionnés :</span>
+                    <span id="quote-total-count" class="font-bold text-brand-dark">0</span>
+                </div>
+                <button id="send-quote-wa" class="w-full bg-brand-whatsapp hover:bg-brand-whatsapp-dark text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-md transition-all active:scale-95">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>Envoyer la demande sur WhatsApp</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS ET DONNÉES DES PRODUITS -->
+    <script>
+        // Numéro officiel Quincaillerie Noukemi
+        const WHATSAPP_PHONE = "237650212584";
+
+        // BASE DE DONNÉES AVEC PRIX ESTIMATIFS ET EMPLACEMENTS IMAGES DÉDIÉS
+        const PRODUCTS = [
+            {
+                id: 1,
+                name: "Câble Électrique TH 1.5mm² (Rouleau 100m)",
+                category: "cables",
+                price: "~ 18 500 FCFA / Rouleau",
+                stockStatus: "in-stock",
+                stockLabel: "En Stock Réel",
+                description: "Fil rigide cuivre pur pour éclairage et installations domestiques aux normes.",
+                image: "produit_cable_1.5mm.jpg",
+                fallbackIcon: "zap"
+            },
+            {
+                id: 2,
+                name: "Câble Électrique TH 2.5mm² (Rouleau 100m)",
+                category: "cables",
+                price: "~ 28 000 FCFA / Rouleau",
+                stockStatus: "in-stock",
+                stockLabel: "En Stock Réel",
+                description: "Câble haute qualité pour prises de courant et équipements électroménagers.",
+                image: "produit_cable_2.5mm.jpg",
+                fallbackIcon: "zap"
+            },
+            {
+                id: 3,
+                name: "Câble Armé U1000 RO2V 3x2.5mm²",
+                category: "cables",
+                price: "~ 1 200 FCFA / Mètre",
+                stockStatus: "limited",
+                stockLabel: "Stock Limité",
+                description: "Câble de puissance renforcé pour extérieur et alimentation générale.",
+                image: "produit_cable_arme.jpg",
+                fallbackIcon: "shield"
+            },
+            {
+                id: 4,
+                name: "Lustre Design Salon Moderne LED",
+                category: "luminaires",
+                price: "~ 35 000 - 65 000 FCFA",
+                stockStatus: "in-stock",
+                stockLabel: "En Stock Réel",
+                description: "Luminaires décoratifs pour salon, chambres et espaces d'accueil.",
+                image: "produit_lustre_salon.jpg",
+                fallbackIcon: "lightbulb"
+            },
+            {
+                id: 5,
+                name: "Projecteur LED Extérieur 50W IP65",
+                category: "luminaires",
+                price: "~ 12 500 FCFA",
+                stockStatus: "in-stock",
+                stockLabel: "En Stock Réel",
+                description: "Éclairage puissant et étanche pour cours, façades et chantiers.",
+                image: "produit_projecteur_50w.jpg",
+                fallbackIcon: "sun"
+            },
+            {
+                id: 6,
+                name: "Disjoncteur Électrique Phase+Neutre 16A/20A",
+                category: "cables",
+                price: "~ 3 500 FCFA / Unité",
+                stockStatus: "in-stock",
+                stockLabel: "En Stock Réel",
+                description: "Protection efficace de vos circuits contre les surcharges et court-circuits.",
+                image: "produit_disjoncteur.jpg",
+                fallbackIcon: "cpu"
+            },
+            {
+                id: 7,
+                name: "Perceuse à Percussion Électroportative",
+                category: "outillage",
+                price: "~ 32 000 FCFA",
+                stockStatus: "order",
+                stockLabel: "Sur Commande Rapide",
+                description: "Outillage robuste pour perçage béton, bois et métal.",
+                image: "produit_perceuse.jpg",
+                fallbackIcon: "wrench"
+            },
+            {
+                id: 8,
+                name: "Kit Raccords Plomberie & Tuyaux PVC",
+                category: "outillage",
+                price: "~ 1 500 FCFA / Pièce",
+                stockStatus: "in-stock",
+                stockLabel: "En Stock Réel",
+                description: "Tuyauterie, coudes et raccords pour évacuation et adduction d'eau.",
+                image: "produit_plomberie_pvc.jpg",
+                fallbackIcon: "droplet"
+            }
+        ];
+
+        // ÉTAT DE L'APPLICATION
+        let currentCategory = 'all';
+        let searchQuery = '';
+        let stockOnly = false;
+        let quoteList = [];
+
+        // INITIALISATION AU CHARGEMENT DE LA PAGE
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            setupEventListeners();
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons();
+            }
+        });
+
+        // --- AFFICHAGE ET FILTRAGE DES PRODUITS ---
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const noResults = document.getElementById('no-results');
+            const countLabel = document.getElementById('results-count');
+
+            // Filtrage
+            const filtered = PRODUCTS.filter(product => {
+                const matchesCategory = currentCategory === 'all' || product.category === currentCategory;
+                const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      product.description.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesStock = !stockOnly || product.stockStatus === 'in-stock';
+
+                return matchesCategory && matchesSearch && matchesStock;
+            });
+
+            // Mettre à jour le compteur
+            countLabel.textContent = `${filtered.length} produit(s)`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+
+            // Génération des cartes HTML
+            grid.innerHTML = filtered.map(product => {
+                const isSelectedForQuote = quoteList.some(item => item.id === product.id);
+                
+                // Pré-remplissage du lien WhatsApp individuel
+                const waMessage = encodeURIComponent(
+                    `Bonjour Quincaillerie Noukemi,\n` +
+                    `Je souhaite me renseigner / commander cet article :\n` +
+                    `• Produit : ${product.name}\n` +
+                    `• Prix Indicatif : ${product.price}\n` +
+                    `• Statut : ${product.stockLabel}\n` +
+                    `Merci de me donner la procédure de confirmation.`
+                );
+                const waLink = `https://wa.me/${WHATSAPP_PHONE}?text=${waMessage}`;
+
+                return `
+                    <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between animate-fade-in shadow-sm group">
+                        <!-- EMPLACEMENT PHOTO PRODUIT (ZOOM ET TRANSITION AU HOVER) -->
+                        <div class="relative h-48 bg-slate-100 overflow-hidden flex items-center justify-center p-2">
+                            <img src="${product.image}" 
+                                 alt="${product.name}" 
+                                 class="product-card-img w-full h-full object-cover rounded-xl"
+                                 onerror="handleImageError(this, '${product.fallbackIcon}')">
+                            
+                            <!-- BADGE DISPONIBILITÉ DE MATÉRIEL -->
+                            <div class="absolute top-3 left-3 z-10">
+                                <span class="text-[10px] font-bold px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm ${getStockBadgeStyle(product.stockStatus)}">
+                                    ${product.stockLabel}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- CONTENU CARTE -->
+                        <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-snug mb-1 group-hover:text-brand-orange transition-colors">
+                                    ${product.name}
+                                </h3>
+                                <p class="text-xs text-slate-500 line-clamp-2">
+                                    ${product.description}
+                                </p>
+                            </div>
+
+                            <div>
+                                <!-- PRIX ESTIMATIF DU MATÉRIEL -->
+                                <div class="bg-slate-50 border border-slate-100 rounded-xl p-2 mb-3 flex items-center justify-between">
+                                    <span class="text-[11px] font-medium text-slate-500">Prix indicatif :</span>
+                                    <span class="text-brand-orange font-black text-sm">${product.price}</span>
+                                </div>
+
+                                <!-- ACTIONS CARTE -->
+                                <div class="flex items-center gap-2 pt-1 border-t border-slate-100">
+                                    <a href="${waLink}" target="_blank" class="flex-1 bg-brand-whatsapp hover:bg-brand-whatsapp-dark text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95">
+                                        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                                        <span>WhatsApp</span>
+                                    </a>
+
+                                    <button onclick="toggleQuoteItem(${product.id})" class="p-2.5 rounded-xl border ${isSelectedForQuote ? 'bg-brand-orange text-white border-brand-orange shadow-glow' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'} transition-all active:scale-90" title="Ajouter au devis express">
+                                        <i data-lucide="${isSelectedForQuote ? 'check' : 'plus'}" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons();
+            }
+        }
+
+        // --- STYLE DES BADGES DE STOCK / DISPONIBILITÉ ---
+        function getStockBadgeStyle(status) {
+            switch(status) {
+                case 'in-stock':
+                    return 'bg-emerald-500/90 text-white';
+                case 'limited':
+                    return 'bg-amber-500/90 text-white';
+                case 'order':
+                    return 'bg-orange-500/90 text-white';
+                default:
+                    return 'bg-slate-700/90 text-white';
+            }
+        }
+
+        // --- LISTENERS ET INTERACTION ---
+        function setupEventListeners() {
+            const searchInput = document.getElementById('search-input');
+            const clearBtn = document.getElementById('clear-search');
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                clearBtn.classList.toggle('hidden', searchQuery.length === 0);
+                renderProducts();
+            });
+
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                clearBtn.classList.add('hidden');
+                renderProducts();
+            });
+
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.category-btn').forEach(b => {
+                        b.classList.remove('bg-brand-dark', 'text-white', 'shadow-sm');
+                        b.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+                    });
+
+                    const target = e.currentTarget;
+                    target.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+                    target.classList.add('bg-brand-dark', 'text-white', 'shadow-sm');
+
+                    currentCategory = target.dataset.category;
+                    renderProducts();
+                });
+            });
+
+            document.getElementById('stock-only-filter').addEventListener('change', (e) => {
+                stockOnly = e.target.checked;
+                renderProducts();
+            });
+
+            document.getElementById('open-quote-modal').addEventListener('click', openQuoteModal);
+            document.getElementById('close-quote-modal').addEventListener('click', closeQuoteModal);
+            document.getElementById('send-quote-wa').addEventListener('click', sendQuoteToWhatsApp);
+        }
+
+        // --- GESTION DU PANIER DE DEVIS ---
+        function toggleQuoteItem(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            const index = quoteList.findIndex(item => item.id === productId);
+
+            if (index > -1) {
+                quoteList.splice(index, 1);
+            } else {
+                quoteList.push(product);
+            }
+
+            updateQuoteBadge();
+            renderProducts();
+        }
+
+        function updateQuoteBadge() {
+            const badge = document.getElementById('quote-badge');
+            badge.textContent = quoteList.length;
+        }
+
+        function openQuoteModal() {
+            const modal = document.getElementById('quote-modal');
+            const listContainer = document.getElementById('quote-items-list');
+            const totalCount = document.getElementById('quote-total-count');
+
+            totalCount.textContent = quoteList.length;
+
+            if (quoteList.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-8 text-slate-400">
+                        <i data-lucide="shopping-bag" class="w-10 h-10 mx-auto mb-2 opacity-50"></i>
+                        <p class="text-sm font-medium">Votre liste de devis est vide.</p>
+                        <p class="text-xs text-slate-400 mt-1">Cliquez sur le bouton "+" des produits pour les ajouter.</p>
+                    </div>
+                `;
+            } else {
+                listContainer.innerHTML = quoteList.map(item => `
+                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-brand-orange rounded-full"></div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">${item.name}</h4>
+                                <div class="flex items-center gap-2 text-[10px] text-slate-500 mt-0.5">
+                                    <span>${item.price}</span>
+                                    <span>•</span>
+                                    <span class="text-emerald-600 font-semibold">${item.stockLabel}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="toggleQuoteItem(${item.id}); openQuoteModal();" class="text-rose-500 hover:text-rose-700 p-1">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            modal.classList.remove('hidden');
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons();
+            }
+        }
+
+        function closeQuoteModal() {
+            document.getElementById('quote-modal').classList.add('hidden');
+        }
+
+        function sendQuoteToWhatsApp() {
+            if (quoteList.length === 0) {
+                return;
+            }
+
+            let message = `Bonjour Quincaillerie Noukemi,\n`;
+            message += `Je souhaite recevoir un devis estimatif pour la liste de matériel suivante :\n\n`;
+
+            quoteList.forEach((item, idx) => {
+                message += `${idx + 1}. ${item.name} (${item.price} - ${item.stockLabel})\n`;
+            });
+
+            message += `\nMerci de me communiquer la disponibilité et le tarif total final.`;
+
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encoded}`, '_blank');
+        }
+    </script>
+</body>
+</html>
